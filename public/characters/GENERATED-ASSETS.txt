@@ -1,0 +1,11 @@
+PINOC characters (private, generated 2026-09-23 by text prompt)
+runner     23463fa5-0af3-42fb-a988-6e5ab6540d63  Teenager with Backpack (mustard hoodie, rust beanie)
+conductor  0ec5027e-2e6e-4eaf-b90b-904152783191  Train Conductor (station master chaser)
+Library motions (free): Running, Sprinting Forward, Jump, Run Jump, Dodge Roll Forward, Hard Landing, Knocked Down Backwards,
+Fall down, Standing Idle, Cheering, Head Hit Reaction, Point Forward, Hit Reaction Front, Vault Over Obstacle, Walk Strafe Left
+Generated motion (3 credits, 4 samples, text-to-motion 2026-09-23): "Sprint Run" task cec82342-f3c6-4e01-9ec7-cdaaf8769c84
+  gen_sprint_0 4e7ec2f6-1dd5-4050-812e-1aa1ba6d1461 · gen_sprint_1 88bd2f9a-9aa1-431c-88cc-4a4f211743a6 (in use) · gen_sprint_2 6f304835-5d66-4b4c-b2ec-5496fd140bfb · gen_sprint_3 c4cd168e-fec4-4349-8733-0ebaddaa606c
+Roster (2026-09-23): beat 23ae96c6-d69e-46e8-8d6b-ee0506d7aae7 (Streetwear Girl)
+  · wukong 246d1648-9f2e-48a5-8bcc-6fb66227a578 (Monkey King) · muse 025d489d-8f53-4ba2-8224-8f6ef514ff34 (Tomboy Character). runner.vsplat = old default, kept for RUNNER_MOCK.
+Motions 2026-09-24 (text-to-motion, sample in use): wall slam 96a9a522 s1 · hurdle trip ce93cdac s3 · caught 1a2b316f s3 · running leap 28a8a6f7 s3
+  · jetpack hover 0d70a55a s2 · dodge L eba54c0d s1 · dodge R b3899b31 s1 · (gate bonk 57b4156f pending, fallback head_hit)

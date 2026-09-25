@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <title>MAPLE RUN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Serif+JP:wght@700&family=Noto+Sans+JP:wght@600;700&display=block" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div id="hud">
+    <div id="left">
+      <div id="score">0</div>
+      <div id="sub"><span id="mult">×1</span><span id="dist">0 m</span></div>
+      <div id="powers"></div>
+    </div>
+    <div id="coins"><i class="leaf"></i><b>0</b></div>
+    <div id="callout"><div class="big"></div><div class="small"></div></div>
+  </div>
+
+  <div id="title">
+    <div class="t-inner">
+      <div class="kicker">A PINOC SHORT · AUTUMN</div>
+      <h1><span class="jp">MOMIJI LINE</span>MAPLE RUN</h1>
+      <div class="sub">Outrun the station master down the Momiji Line</div>
+      <div class="pick">Choose your runner <span class="key-only"><kbd>←</kbd><kbd>→</kbd></span></div>
+      <div id="roster"></div>
+      <div class="keys">
+        <span><kbd>←</kbd><kbd>→</kbd> switch track</span>
+        <span><kbd>↑</kbd> jump</span>
+        <span><kbd>↓</kbd> roll</span>
+        <span class="touch">swipe ← → to switch · ↑ jump · ↓ roll</span>
+      </div>
+      <button id="run">Run <span class="key-only"><kbd>Space</kbd></span></button>
+      <div id="best"></div>
+    </div>
+  </div>
+
+  <div id="over">
+    <div class="o-inner">
+      <div class="kicker" id="o-kicker">CAUGHT!</div>
+      <div id="o-score">0</div>
+      <div class="o-row"><span><i class="leaf"></i><b id="o-coins">0</b></span><span id="o-dist">0 m</span><span id="o-best"></span></div>
+      <div class="o-btns"><button id="again">Run again</button><button id="change" class="ghost">Change runner</button></div>
+      <div class="credit">Every runner is a <b>PINOC</b> Gaussian-splat character · made from one photo or one prompt</div>
+    </div>
+  </div>
+
+  <div id="pause"><div class="p-inner"><div class="big">PAUSED</div><div class="small">Press any key or tap to resume</div></div></div>
+
+  <div id="upload">
+    <div class="u-card">
+      <button id="up-close" aria-label="Close">×</button>
+      <div class="kicker">PINOC · PHOTO → 3D</div>
+      <h2>Run as yourself</h2>
+      <p>Upload one photo. PINOC turns it into a Gaussian-splat runner in about 3 minutes, and you can keep playing while it bakes.</p>
+      <div id="up-drop"><span>Drop a photo or <u>choose one</u></span></div>
+      <input id="up-file" type="file" accept="image/*" hidden />
+      <ul class="tips"><li>Full body, head to shoes</li><li>One person, facing the camera</li><li>Good light, simple pose</li></ul>
+      <button id="up-go" disabled>Make my runner</button>
+      <div id="up-note"></div>
+    </div>
+  </div>
+  <div id="toast"></div>
+
+  <button id="mute" title="Sound (M)"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="w" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+
+  <div id="loading"><div class="l-leaf"></div><div class="l-title">MAPLE RUN</div><div id="l-msg">Loading</div></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
