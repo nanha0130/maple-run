@@ -427,14 +427,11 @@ async function boot() {
   msg('Painting the maples');
   const scene = await Scene.create($('canvas'), {
     depth: true, fov: 60, far: 2600, antialias: false, backend: Q.get('backend') === 'webgl' ? 'webgl' : undefined,
-    gsplatCulling: true,
+    // a cap on devicePixelRatio: 1x CSS on phones. (Chrome's phone emulation reports device-pixel sizes in CSS px, so it looks blocky there; real phones don't.)
+    maxPixelRatio: Math.min(parseFloat(Q.get('dpr')) || (IS_TOUCH ? 1 : 1.5), window.devicePixelRatio || 1), gsplatCulling: true,
     bgColor: { r: .9, g: .8, b: .65, a: 1 }, ambientLight: .5, exposure: 1, preserveDrawingBuffer: Q.has('capture'),
   });
   game.scene = scene; scene.start(); scene.cameraEntity.camera.nearClip = .1;
-  // The engine's backing size is css * maxPixelRatio / devicePixelRatio (not a cap), so solve for the scale we want:
-  // 1x CSS on phones, 1.25x on desktop, ?dpr= to override.
-  const fitRes = () => { scene.graphicsDevice.maxPixelRatio = clamp((parseFloat(Q.get('dpr')) || (IS_TOUCH ? 1 : 1.25)) * (window.devicePixelRatio || 1), .5, 4); };
-  fitRes(); addEventListener('resize', fitRes);
   await Promise.all(['700 40px "Noto Serif JP"', '600 20px "Noto Sans JP"', '700 20px "Noto Sans JP"', '400 40px "Dela Gothic One"'].map(f => document.fonts.load(f, 'もみじ台紅葉谷鉄道線MOMIJI'))).catch(() => { });
   game.world = new World(scene);
   frameLook(); scene.graphicsDevice.on('resizecanvas', () => setTimeout(frameLook, 0));
