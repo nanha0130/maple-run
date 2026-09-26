@@ -196,7 +196,11 @@ export class Obstacles {
     const gapMin = 14 + speed * .55;
     const types = difficulty < .15 ? ['hurdles', 'gates', 'trains', 'coins', 'hurdles', 'trains']
       : ['hurdles', 'gates', 'mixed', 'trains', 'rampRun', 'rampRun', 'oncoming', 'mixed', 'trains', 'coins'];
-    const type = types[Math.floor(r() * types.length)];
+    let type = types[Math.floor(r() * types.length)];
+    // it's a railway: never more than two stretches in a row without a train
+    const TRAINY = ['trains', 'rampRun', 'oncoming'];
+    if (this.sinceTrain >= 2 && !TRAINY.includes(type)) { const t = types.filter(k => TRAINY.includes(k)); type = t[Math.floor(r() * t.length)]; }
+    this.sinceTrain = TRAINY.includes(type) ? 0 : (this.sinceTrain || 0) + 1;
     let used = 0;
     if (type === 'hurdles' || type === 'gates') {
       const rows = 2 + Math.floor(r() * 2);
@@ -289,5 +293,5 @@ export class Obstacles {
     }
     return g;
   }
-  reset() { for (const o of this.list) o.e.destroy(); for (const c of this.coins) c.e.destroy(); this.list = []; this.coins = []; this.spawnZ = -40; }
+  reset() { for (const o of this.list) o.e.destroy(); for (const c of this.coins) c.e.destroy(); this.list = []; this.coins = []; this.spawnZ = -40; this.sinceTrain = 1; }
 }

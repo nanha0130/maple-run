@@ -206,7 +206,7 @@ function seek(r, threat) {
   const value = lane => {
     let v = 0; const x = LANES[lane];
     for (const c of game.obs.coins) if (!c.taken && Math.abs(c.x - x) < .5 && r.z - c.z > 3 && r.z - c.z < 26 && c.y < r.y + 2.2) v++;
-    for (const p of game.powerups.list) if (Math.abs(p.x - x) < .5 && r.z - p.z > 2 && r.z - p.z < 34) v += 8;
+    for (const p of game.powerups.list) if (Math.abs(p.x - x) < .5 && r.z - p.z > -.5 && r.z - p.z < 34) v += 8; // keep counting it right up to the pickup
     return v;
   };
   const cur = value(r.lane);
