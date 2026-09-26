@@ -2,7 +2,9 @@
 
 A Subway Surfers–style endless runner down a three-track country railway through a maple tunnel in peak autumn colour.
 Every runner, and the station master chasing them, is a PINOC Gaussian-splat character animated with PINOC motion clips.
-On the title screen you pick **NAN** (generated from a photo), **BEAT**, **WUKONG** or **MUSE**, or you **upload your own photo** and PINOC turns it into your runner.
+On the title screen you pick **BEAT**, **WUKONG** or **MUSE**. With the photo backend running locally you can also **upload your own photo** and PINOC turns it into your runner.
+
+**Play:** https://nanha0130.github.io/maple-run/ (needs a WebGPU browser: desktop Chrome or Edge, or Safari 26+)
 
 ```
 npm install
