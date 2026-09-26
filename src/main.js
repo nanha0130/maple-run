@@ -1,6 +1,6 @@
 import * as pc from 'playcanvas';
 import { Scene } from '@viggle/splat-engine';
-import { World, LANES, RAIL_Y } from './world.js';
+import { World, LANES, RAIL_Y, IS_TOUCH } from './world.js';
 import { Obstacles, TRAIN_TOP } from './obstacles.js';
 import { Leaves } from './fx.js';
 import { Audio } from './audio.js';
@@ -427,17 +427,21 @@ async function boot() {
   msg('Painting the maples');
   const scene = await Scene.create($('canvas'), {
     depth: true, fov: 60, far: 2600, antialias: false, backend: Q.get('backend') === 'webgl' ? 'webgl' : undefined,
-    maxPixelRatio: Math.min(parseFloat(Q.get('dpr')) || 1.5, window.devicePixelRatio || 1), gsplatCulling: true,
+    gsplatCulling: true,
     bgColor: { r: .9, g: .8, b: .65, a: 1 }, ambientLight: .5, exposure: 1, preserveDrawingBuffer: Q.has('capture'),
   });
   game.scene = scene; scene.start(); scene.cameraEntity.camera.nearClip = .1;
+  // The engine's backing size is css * maxPixelRatio / devicePixelRatio (not a cap), so solve for the scale we want:
+  // 1x CSS on phones, 1.25x on desktop, ?dpr= to override.
+  const fitRes = () => { scene.graphicsDevice.maxPixelRatio = clamp((parseFloat(Q.get('dpr')) || (IS_TOUCH ? 1 : 1.25)) * (window.devicePixelRatio || 1), .5, 4); };
+  fitRes(); addEventListener('resize', fitRes);
   await Promise.all(['700 40px "Noto Serif JP"', '600 20px "Noto Sans JP"', '700 20px "Noto Sans JP"', '400 40px "Dela Gothic One"'].map(f => document.fonts.load(f, 'もみじ台紅葉谷鉄道線MOMIJI'))).catch(() => { });
   game.world = new World(scene);
   frameLook(); scene.graphicsDevice.on('resizecanvas', () => setTimeout(frameLook, 0));
   msg('Laying the tracks');
   game.obs = new Obstacles(game); await game.obs.init();
   game.powerups = new Powerups(game);
-  game.leaves = new Leaves(scene.app);
+  game.leaves = new Leaves(scene.app, { count: IS_TOUCH ? 320 : 700 });
   msg('Waking the runner');
   const runPick = Q.get('run') ?? 'gen_sprint_1';
   const have = await loadClips(scene, [...CLIPS, runPick, ...Object.values(CLIP).map(c => c.name)]);

@@ -6,6 +6,8 @@ import * as A from './art.js';
 
 // Three tracks running toward -Z through a maple valley. Scenery comes in 40 m chunks that are
 // built once per variant and cloned into slots ahead of the runner.
+// phones and tablets: lighter shadows, shorter draw distance (the fog hides the edge)
+export const IS_TOUCH = matchMedia('(pointer: coarse)').matches;
 export const LANE = 2.5, LANES = [-LANE, 0, LANE], CHUNK = 40, RAIL_Y = .14;
 const CLEAR_X = 5, CLEAR_Y = 6.6; // nothing leafy over the tracks below this height
 export const SUN = { azimuth: 236, elevation: 19 };
@@ -114,7 +116,7 @@ export class World {
     const L = new pc.Entity('sunLight'); L.setLocalEulerAngles(90, 0, 0); pivot.addChild(L);
     L.addComponent('light', {
       type: 'directional', color: new pc.Color(1, .84, .62), intensity: 2.5, castShadows: true,
-      shadowDistance: 80, shadowResolution: 2048, numCascades: 3, cascadeDistribution: .7, shadowBias: .3, normalOffsetBias: .08, shadowType: pc.SHADOW_PCF3_32F,
+      shadowDistance: IS_TOUCH ? 55 : 80, shadowResolution: IS_TOUCH ? 1024 : 2048, numCascades: IS_TOUCH ? 2 : 3, cascadeDistribution: .7, shadowBias: .3, normalOffsetBias: .08, shadowType: pc.SHADOW_PCF3_32F,
     });
     this.sunLight = L;
     // warm bounce from behind the camera so faces toward the runner (obstacles, trunks) read clearly
@@ -124,13 +126,13 @@ export class World {
     const sky = new pc.Entity('skyFill'); sky.addComponent('light', { type: 'directional', color: new pc.Color(.62, .7, .9), intensity: .35, castShadows: false });
     sky.setLocalEulerAngles(0, 0, 0); this.app.root.addChild(sky);
     this.app.scene.ambientLight = new pc.Color(.56, .5, .48);
-    const fog = this.app.scene.fog; fog.type = pc.FOG_LINEAR; fog.color = new pc.Color().fromString('#e9cfa8'); fog.start = 45; fog.end = 330;
+    const fog = this.app.scene.fog; fog.type = pc.FOG_LINEAR; fog.color = new pc.Color().fromString('#e9cfa8'); fog.start = 45; fog.end = IS_TOUCH ? 215 : 330;
     this.splatSun = SunLight.create(this.scene, { azimuth: SUN.azimuth, elevation: SUN.elevation + 8, color: '#ffd6a0', intensity: .95 });
     this.splatSky = SkyLight.create(this.scene, { color: '#c9b7a8', intensity: .5 });
     // the meshes get a warm bounce from behind the camera (see `fill`); splats need the same or their backs go black
     this.splatFill = PointLight.create(this.scene, { position: { x: 0, y: 3, z: 6 }, color: '#ffd9b0', intensity: .38, range: 14 });
     const s = this.splatSun; s.shadowStrength = .6; s.shadowPcfStride = 2; s.shadowMinCasterOpacity = .5; s.shadowHalfExtentCap = 20; s.shadowBoxHalfExtent = new pc.Vec3(8, 5, 8);
-    this.shadows = new URLSearchParams(location.search).has('noshadowsys') ? null : ShadowSystem.bind(this.scene, { resolution: 1024 });
+    this.shadows = new URLSearchParams(location.search).has('noshadowsys') ? null : ShadowSystem.bind(this.scene, { resolution: IS_TOUCH ? 512 : 1024 });
     // invisible layer: bone-driven capsules drawn only into the sun's shadow map (splat -> mesh shadows)
     this.proxyLayer = new pc.Layer({ name: 'ShadowProxy' }); this.app.scene.layers.push(this.proxyLayer);
     L.light.layers = [...L.light.layers, this.proxyLayer.id];
@@ -327,7 +329,7 @@ export class World {
   }
   update(dt, runnerZ, cam) {
     this.time += dt;
-    while (this.nextZ > runnerZ - 300) {
+    while (this.nextZ > runnerZ - (IS_TOUCH ? 220 : 300)) {
       const type = this.pickType(), list = this.variants[type], tpl = list[Math.floor(Math.random() * list.length)];
       const e = tpl.clone(); e.enabled = true; e.setLocalPosition(0, 0, this.nextZ); this.root.addChild(e);
       this.slots.push({ e, z: this.nextZ, type, canopy: tpl.canopy }); this.nextZ -= CHUNK;
